@@ -4,6 +4,8 @@ namespace day00_5_ex00
 {
     public class Customer
     {
+        private const int _minRequestGoodsCount = 1;
+
         public string Name { get; init; }
         public int Id { get; init; }
         public int CartCount { get; protected set; }
@@ -41,14 +43,37 @@ namespace day00_5_ex00
 
         public static bool operator ==(Customer left, Customer right) => Equals(left, right);
         public static bool operator !=(Customer left, Customer right) => !Equals(left, right);
-
-
-        public void FillCart(int maxCapacity)
+        
+        /// <summary>
+        ///  Set CartCount with random value between "_minRequestGoodsCount" "maxOfferGoodsCount".
+        /// If offer lower than min request - set CartCount with _minRequestGoodsCount
+        /// </summary>
+        /// <param name="maxOfferGoodsCount">
+        /// The maximum value offered by the store that can be added to the cart
+        /// </param>
+        /// <returns>
+        /// The number of products that have been chosen
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// max offer can't be negative
+        /// </exception>
+        public int FillCart(int maxOfferGoodsCount)
         {
-            if (maxCapacity < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxCapacity),"maxCapacity can't be negative");
-            var rng = new Random();
-            CartCount = rng.Next(0, maxCapacity);
+            switch (maxOfferGoodsCount)
+            {
+                case < 0:
+                    throw new ArgumentOutOfRangeException(nameof(maxOfferGoodsCount),"max offer can't be negative");
+                case < _minRequestGoodsCount:
+                    CartCount = maxOfferGoodsCount;
+                    break;
+                default:
+                {
+                    var rng = new Random();
+                    CartCount = rng.Next(_minRequestGoodsCount, maxOfferGoodsCount);
+                    break;
+                }
+            }
+            return CartCount;
         }
     }
 }

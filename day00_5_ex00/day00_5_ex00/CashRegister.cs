@@ -7,7 +7,7 @@ namespace day00_5_ex00
     public class CashRegister
     {
         public string Lable { get; init; }
-        public Queue<Customer> CustomerQueue { get; protected set; }
+        private Queue<Customer> CustomerQueue { get; set; }
 
         public CashRegister(string lable)
         {
@@ -47,5 +47,18 @@ namespace day00_5_ex00
 
         public int GetCustomerCount() => CustomerQueue.Count;
 
+        public void AddCustomerToQueue(Customer customer)
+        {
+            if (CustomerQueue.Contains(customer))
+                throw new ArgumentException("Customer already in queue");
+            CustomerQueue.Enqueue(customer);
+        }
+
+        public void ServeNextCustomer()
+        {
+            if (CustomerQueue.Count > 0)
+                CustomerQueue.Dequeue();
+        }
+        
     }
 }
